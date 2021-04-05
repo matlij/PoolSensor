@@ -8,7 +8,7 @@ trigger:
 
 variables:
   # Azure Resource Manager connection created during pipeline creation
-  azureSubscription: 'f38d926e-2c03-4d27-8910-2ea154475386'
+  azureSubscription: '909eb5e0-25b8-4ea2-a491-e39f55abbcb4'
 
   # Function app name
   functionAppName: 'PoolDataIngestion'
