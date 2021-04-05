@@ -3,6 +3,7 @@
 
 import random
 import time
+from datetime import datetime
 
 # Using the Python Device SDK for IoT Hub:
 #   https://github.com/Azure/azure-iot-sdk-python
@@ -17,7 +18,7 @@ CONNECTION_STRING = "HostName=mypooldevicehub.azure-devices.net;DeviceId=test-de
 # Define the JSON message to send to IoT Hub.
 TEMPERATURE = 20.0
 HUMIDITY = 60
-MSG_TXT = '{{"temperature": {temperature},"humidity": {humidity}}}'
+MSG_TXT = '{{"Temperature": {temperature},"Humidity": {humidity},"TimeStamp": "{timestamp}"}}'
 
 def iothub_client_init():
     # Create an IoT Hub client
@@ -31,10 +32,14 @@ def iothub_client_telemetry_sample_run():
         print ( "IoT Hub device sending periodic messages, press Ctrl-C to exit" )
 
         while True:
+            input("Press any key to send message:")
+
             # Build the message with simulated telemetry values.
             temperature = TEMPERATURE + (random.random() * 15)
             humidity = HUMIDITY + (random.random() * 20)
-            msg_txt_formatted = MSG_TXT.format(temperature=temperature, humidity=humidity)
+            timeNow = datetime.now();
+            timestamp = timeNow.strftime("%Y-%m-%dT%H:%M:%S")
+            msg_txt_formatted = MSG_TXT.format(temperature=temperature, humidity=humidity, timestamp=timestamp)
             message = Message(msg_txt_formatted)
 
             # Add a custom application property to the message.
@@ -48,7 +53,7 @@ def iothub_client_telemetry_sample_run():
             print( "Sending message: {}".format(message) )
             client.send_message(message)
             print ( "Message successfully sent" )
-            time.sleep(10)
+            time.sleep(1)
 
     except KeyboardInterrupt:
         print ( "IoTHubClient sample stopped" )
