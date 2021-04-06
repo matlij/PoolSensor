@@ -19,3 +19,19 @@ steps:
     command: build
     arguments: '-c $(buildConfiguration)'
     projects: '**/PoolSensorAPI/*.csproj'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Publish the project - $(buildConfiguration)'
+  inputs:
+    command: publish
+    arguments: '--no-build -c $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+    projects: '**/PoolSensorAPI.csproj'
+    zipAfterPublish: true
+
+- task: AzureWebApp@1
+  inputs:
+    azureSubscription: 'Azure subscription mattias(909eb5e0-25b8-4ea2-a491-e39f55abbcb4)'
+    appType: 'webApp'
+    appName: 'PoolSensorAPI'
+    package: '$(Build.ArtifactStagingDirectory)/**/*.zip'
+    deploymentMethod: 'auto'
