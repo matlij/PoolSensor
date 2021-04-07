@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using System;
 
 namespace PoolSensorAPI
 {
@@ -22,7 +23,7 @@ namespace PoolSensorAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var connString = Configuration.GetSection("MySettings").GetSection("WEBSITE_CONTENTAZUREFILECONNECTIONSTRING").Value;
+            var connString = Environment.GetEnvironmentVariable("AZURE_STORAGE_CONNECTION_STRING");
             services.AddSingleton<IMyAppSettings>(i => new MyAppSettings { AzureFileConnectionString = connString });
             services.AddSingleton<ITableStorage, AzureTableStorage>();
             services.AddTransient<IPoolSensorRepository, PoolSensorRepository>();
