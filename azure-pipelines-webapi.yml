@@ -19,6 +19,7 @@ pool:
 variables:
   buildConfiguration: 'Release'
   projectName: 'PoolSensorAPI'
+  workingDirectory: '$(System.DefaultWorkingDirectory)/PoolSensorAPI'
 
 stages:
 - stage: Build
@@ -33,22 +34,28 @@ stages:
         displayName: 'Build the project - $(buildConfiguration)'
         inputs:
           command: build
-          arguments: '-c $(buildConfiguration)'
-          projects: '**/$(projectName).csproj'
+          arguments: '-c $(buildConfiguration) --output $(System.DefaultWorkingDirectory)/publish_output'
+          projects: '$(workingDirectory)/*.csproj'
 
       - task: DotNetCoreCLI@2
+        displayName: "Run unit tests"
         inputs:
           command: 'test'
           projects: '**/*Tests.csproj'
           testRunTitle: 'Run unit tests'
+          arguments: '-c $(buildConfiguration)'
 
-      - task: DotNetCoreCLI@2
-        displayName: 'Publish the project - $(buildConfiguration)'
+      - task: ArchiveFiles@2
+        displayName: 'Archive files'
         inputs:
-          command: publish
-          arguments: '--no-build -c $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
-          projects: '**/$(projectName).csproj'
-          zipAfterPublish: true
+          rootFolderOrFile: '$(System.DefaultWorkingDirectory)/publish_output'
+          includeRootFolder: false
+          archiveType: zip
+          archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+          replaceExistingArchive: true
+
+      - publish: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+        artifact: drop
 
 - stage: Deploy
   displayName: Deploy stage
@@ -69,7 +76,7 @@ stages:
               azureSubscription: 'Azure subscription mattias(909eb5e0-25b8-4ea2-a491-e39f55abbcb4)'
               appType: 'webApp'
               appName: 'PoolSensorAPI'
-              package: '$(Build.ArtifactStagingDirectory)/**/*.zip'
+              package: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
               deploymentMethod: 'auto'
         
 
