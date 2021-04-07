@@ -24,6 +24,7 @@ namespace PoolSensorAPI
         {
             var connString = Configuration.GetSection("MySettings").GetSection("WEBSITE_CONTENTAZUREFILECONNECTIONSTRING").Value;
             services.AddSingleton<IMyAppSettings>(i => new MyAppSettings { AzureFileConnectionString = connString });
+            services.AddSingleton<ITableStorage, AzureTableStorage>();
             services.AddTransient<IPoolSensorRepository, PoolSensorRepository>();
 
             services.AddControllers();

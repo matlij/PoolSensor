@@ -8,6 +8,6 @@ namespace DataLayer.Interfaces
     public interface IPoolSensorRepository
     {
         Task CreateOrUpdate(PoolDataEntity entity);
-        IEnumerable<PoolDataEntity> Get(string deviceid, DateTimeOffset? fromDate = null);
+        Task<IEnumerable<PoolDataEntity>> Get(string deviceid, DateTimeOffset? fromDate = null);
     }
 }

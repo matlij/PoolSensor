@@ -5,6 +5,7 @@ using Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -25,9 +26,9 @@ namespace PoolSensorAPI.Controllers
 
         // GET: api/<PoolSensorController>
         [HttpGet("{deviceid}")]
-        public IEnumerable<PoolSensorData> Get(string deviceid, [FromQuery(Name = "fromDate")] DateTime? fromDate = null)
+        public async Task<IEnumerable<PoolSensorData>> Get(string deviceid, [FromQuery(Name = "fromDate")] DateTime? fromDate = null)
         {
-            var data = _poolSensorRepository.Get(deviceid, fromDate);
+            var data = await _poolSensorRepository.Get(deviceid, fromDate);
 
             return data.Select(d => new PoolSensorData
             {

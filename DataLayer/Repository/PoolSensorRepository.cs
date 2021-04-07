@@ -1,45 +1,43 @@
 ﻿using DataLayer.Interfaces;
 using DataLayer.Models;
 using Microsoft.Azure.Cosmos.Table;
-using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace DataLayer.Repository
 {
+
     public class PoolSensorRepository : IPoolSensorRepository
     {
-        private readonly CloudTable _poolDataTable;
+        private const string TableName = "pooldata";
+        private readonly ITableStorage _tableStorage;
 
-        public PoolSensorRepository(IMyAppSettings appSettings)
+        public PoolSensorRepository(ITableStorage tableStorage)
         {
-            var storageAccount = CloudStorageAccount.Parse(appSettings.AzureFileConnectionString);
-
-            var tableClient = storageAccount.CreateCloudTableClient();
-
-            _poolDataTable = tableClient.GetTableReference("pooldata");
+            _tableStorage = tableStorage;
         }
 
-        public IEnumerable<PoolDataEntity> Get(string deviceid, DateTimeOffset? fromDate = null)
+        public async Task<IEnumerable<PoolDataEntity>> Get(string deviceid, DateTimeOffset? fromDate = null)
         {
-            var deviceFilter = TableQuery.GenerateFilterCondition(nameof(PoolDataEntity.PartitionKey), QueryComparisons.Equal, deviceid);
-            var fromDateFilter = TableQuery.GenerateFilterCondition(nameof(PoolDataEntity.RowKey), QueryComparisons.GreaterThanOrEqual, fromDate?.Ticks.ToString() ?? DateTimeOffset.MinValue.Ticks.ToString());
+            var deviceFilter = TableQuery.GenerateFilterCondition(
+                nameof(PoolDataEntity.PartitionKey), 
+                QueryComparisons.Equal, 
+                deviceid);
+
+            var fromDateFilter = TableQuery.GenerateFilterCondition(
+                nameof(PoolDataEntity.RowKey), 
+                QueryComparisons.GreaterThanOrEqual, 
+                fromDate?.Ticks.ToString() ?? DateTimeOffset.MinValue.Ticks.ToString());
+
             var filter = TableQuery.CombineFilters(deviceFilter, TableOperators.And, fromDateFilter);
 
-            var query = new TableQuery<PoolDataEntity>()
-                .Where(filter);
-
-            var result = _poolDataTable.ExecuteQuery(query);
-
-            return result;
+            return await _tableStorage.GetAsync<PoolDataEntity>(TableName, filter);
         }
 
         public async Task CreateOrUpdate(PoolDataEntity entity)
         {
-            var operation = TableOperation.InsertOrReplace(entity);
-
-            await _poolDataTable.ExecuteAsync(operation);
+            await _tableStorage.AddOrUpdateAsync(TableName, entity);
         }
     }
 }

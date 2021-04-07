@@ -7,13 +7,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PoolSensorAPI", "PoolSensor
 EndProject
 Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "PoolDevice", "PoolDevice\PoolDevice.pyproj", "{D8F8DDE3-380F-431D-8F47-4B8FF34DCBAD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataLayer", "DataLayer\DataLayer.csproj", "{6332C878-21DE-44AF-B2AF-20DE0FCF2700}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataLayer", "DataLayer\DataLayer.csproj", "{6332C878-21DE-44AF-B2AF-20DE0FCF2700}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PoolDataIngestion", "PoolDataIngestion\PoolDataIngestion.csproj", "{F6717248-E1FB-46F1-A9E2-213B61F31F70}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PoolDataIngestion", "PoolDataIngestion\PoolDataIngestion.csproj", "{F6717248-E1FB-46F1-A9E2-213B61F31F70}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{8689EC5A-0874-40F4-A4DE-00F0F11CFA75}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models", "Models\Models.csproj", "{47598AAF-D11E-4D49-8179-C0B1028894B3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Models", "Models\Models.csproj", "{47598AAF-D11E-4D49-8179-C0B1028894B3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{EA9B5DE5-2483-4D5D-BEA7-2C0D67E726C7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataLayerTests", "DataLayerTests\DataLayerTests.csproj", "{1A29F234-20D8-4DF9-A012-81926ED13D9F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +43,10 @@ Global
 		{47598AAF-D11E-4D49-8179-C0B1028894B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{47598AAF-D11E-4D49-8179-C0B1028894B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{47598AAF-D11E-4D49-8179-C0B1028894B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A29F234-20D8-4DF9-A012-81926ED13D9F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A29F234-20D8-4DF9-A012-81926ED13D9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A29F234-20D8-4DF9-A012-81926ED13D9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A29F234-20D8-4DF9-A012-81926ED13D9F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -46,6 +54,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{6332C878-21DE-44AF-B2AF-20DE0FCF2700} = {8689EC5A-0874-40F4-A4DE-00F0F11CFA75}
 		{47598AAF-D11E-4D49-8179-C0B1028894B3} = {8689EC5A-0874-40F4-A4DE-00F0F11CFA75}
+		{1A29F234-20D8-4DF9-A012-81926ED13D9F} = {EA9B5DE5-2483-4D5D-BEA7-2C0D67E726C7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B7AEB8CD-0B3A-4C41-97A6-401E1E04D2FA}
