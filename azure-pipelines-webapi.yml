@@ -37,6 +37,12 @@ stages:
           projects: '**/$(projectName).csproj'
 
       - task: DotNetCoreCLI@2
+        inputs:
+          command: 'test'
+          projects: '**/*Tests.csproj'
+          testRunTitle: 'Run unit tests'
+
+      - task: DotNetCoreCLI@2
         displayName: 'Publish the project - $(buildConfiguration)'
         inputs:
           command: publish
