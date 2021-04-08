@@ -28,6 +28,8 @@ namespace PoolSensorAPI.Controllers
         [HttpGet("{deviceid}")]
         public async Task<IEnumerable<PoolSensorData>> Get(string deviceid, [FromQuery(Name = "fromDate")] DateTime? fromDate = null)
         {
+            _logger.LogDebug($"Get pool sensor data called for {nameof(deviceid)} '{deviceid}'. Parameters: {nameof(fromDate)} - {fromDate}");
+
             var data = await _poolSensorRepository.Get(deviceid, fromDate);
 
             return data.Select(d => new PoolSensorData
