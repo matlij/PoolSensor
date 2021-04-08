@@ -33,15 +33,15 @@ steps:
   displayName: "Run unit tests"
   inputs:
     command: 'test'
-    projects: '**/*Tests/*.csproj'
-    testRunTitle: 'Run unit tests'
-    arguments: '-c $(buildConfiguration) --collect "Code coverage"'
+    projects: '**/*Tests.csproj'
+    arguments: '--no-build -c $(buildConfiguration) --collect "Code coverage"'
+    publishTestResults: true
 
 - task: DotNetCoreCLI@2
   displayName: 'Publish and zip'
   inputs:
     command: 'publish'
-    arguments: '-c $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+    arguments: '--no-build -c $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
     projects: '$(workingDirectory)/*.csproj'
     zipAfterPublish: true
 
