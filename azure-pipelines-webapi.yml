@@ -60,7 +60,7 @@ stages:
   dependsOn: Build
   jobs:
   - deployment: Deploy
-    environment: development
+    environment: staging
     strategy:
       runOnce:
         deploy:
