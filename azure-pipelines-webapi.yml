@@ -48,7 +48,7 @@ stages:
       displayName: 'Publish and zip the project - $(buildConfiguration)'
       inputs:
         command: 'publish'
-        arguments: '--no-build -c $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+        arguments: '--no-build -c $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)/$(buildConfiguration)'
         projects: '$(workingDirectory)/*.csproj'
         zipAfterPublish: true
     
