@@ -18,36 +18,59 @@ pool:
 
 variables:
   buildConfiguration: 'Release'
-  projectName: 'PoolSensorAPI'
-  workingDirectory: '$(System.DefaultWorkingDirectory)/PoolSensorAPI'
 
-steps:
-- task: DotNetCoreCLI@2
-  displayName: 'Build the project - $(buildConfiguration)'
-  inputs:
-    command: build
-    arguments: '-c $(buildConfiguration)'
-    projects: '$(workingDirectory)/*.csproj'
+stages:
+- stage: 'Build'
+  displayName: 'Build the web application'
+  jobs:
+  - job: 'Build'
+    displayName: 'Build job'
 
-- task: DotNetCoreCLI@2
-  displayName: "Run unit tests"
-  inputs:
-    command: 'test'
-    projects: '**/*Tests.csproj'
-    arguments: '--no-build -c $(buildConfiguration) --collect "Code coverage"'
-    publishTestResults: true
+    variables:
+      workingDirectory: '$(System.DefaultWorkingDirectory)/PoolSensorAPI'
 
-- task: DotNetCoreCLI@2
-  displayName: 'Publish and zip'
-  inputs:
-    command: 'publish'
-    arguments: '--no-build -c $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
-    projects: '$(workingDirectory)/*.csproj'
-    zipAfterPublish: true
+    steps:
+    - task: DotNetCoreCLI@2
+      displayName: 'Build the project - $(buildConfiguration)'
+      inputs:
+        command: build
+        arguments: '-c $(buildConfiguration)'
+        projects: '$(workingDirectory)/*.csproj'
+    
+    - task: DotNetCoreCLI@2
+      displayName: "Run unit tests"
+      inputs:
+        command: 'test'
+        projects: '**/*Tests.csproj'
+        arguments: '--no-build -c $(buildConfiguration)'
+    
+    - task: DotNetCoreCLI@2
+      displayName: 'Publish and zip the project - $(buildConfiguration)'
+      inputs:
+        command: 'publish'
+        arguments: '--no-build -c $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+        projects: '$(workingDirectory)/*.csproj'
+        zipAfterPublish: true
+    
+    - publish: $(Build.ArtifactStagingDirectory)
+      artifact: drop
 
-- task: AzureWebApp@1
-  inputs:
-    azureSubscription: 'Azure subscription mattias(909eb5e0-25b8-4ea2-a491-e39f55abbcb4)'
-    appType: 'webApp'
-    appName: 'PoolSensorAPI'
-    package: '$(Build.ArtifactStagingDirectory)/**/*.zip'
+- stage: 'Deploy stage'
+  displayName: 'Deploy to dev environment'
+  dependsOn: Build
+  jobs:
+  - deployment: Deploy
+    environment: development
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - download: current
+            artifact: drop
+
+          - task: AzureWebApp@1
+            inputs: 
+              azureSubscription: 'Azure subscription mattias(909eb5e0-25b8-4ea2-a491-e39f55abbcb4)'
+              appType: 'webApp'
+              appName: 'PoolSensorAPI'
+              package: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/*.zip'
