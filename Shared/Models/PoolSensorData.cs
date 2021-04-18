@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Models
 {
@@ -9,6 +7,5 @@ namespace Models
         public string DeviceId { get; set; }
         public double Temperature { get; set; }
         public DateTimeOffset TimeStamp { get; set; }
-
     }
 }
