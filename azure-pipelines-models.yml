@@ -1,0 +1,39 @@
+trigger:
+  branches:
+    include:
+    - master
+    - releases/*
+  paths:
+    include:
+    - Shared/Models
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  modelProjPath: 'Shared/Models'
+  workingDirectory: '$(System.DefaultWorkingDirectory)/Shared/Models'
+
+steps:
+- task: DotNetCoreCLI@2
+  displayName: 'Create nuget'
+  inputs:
+    command: pack
+    outputDir: $(Build.ArtifactStagingDirectory)/$(modelProjPath)
+    # arguments: '-c release'
+    projects: '$(workingDirectory)/*.csproj'
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'push'
+    packagesToPush: '$(Build.ArtifactStagingDirectory)/$(modelProjPath)/*.nupkg'
+    nuGetFeedType: 'internal'
+    publishVstsFeed: '6aa6eab7-4bc3-4e54-b377-a0710c83a895'
+
+- script: echo Hello, world!
+  displayName: 'Run a one-line script'
+
+- script: |
+    echo Add other tasks to build, test, and deploy your project.
+    echo See https://aka.ms/yaml
+  displayName: 'Run a multi-line script'

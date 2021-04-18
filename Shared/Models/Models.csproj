@@ -2,6 +2,9 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <Authors>PoolSensor</Authors>
+    <Company>PoolSensor</Company>
+    <Product>PoolSensorModels</Product>
   </PropertyGroup>
 
 </Project>
