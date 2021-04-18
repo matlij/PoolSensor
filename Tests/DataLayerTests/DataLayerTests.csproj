@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DataLayer\DataLayer.csproj" />
+    <ProjectReference Include="..\..\Shared\DataLayer\DataLayer.csproj" />
   </ItemGroup>
 
 </Project>
