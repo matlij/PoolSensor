@@ -13,22 +13,35 @@ pool:
 variables:
   modelProjPath: 'Shared/Models'
   workingDirectory: '$(System.DefaultWorkingDirectory)/Shared/Models'
+  buildConfiguration: release
 
 steps:
 - task: DotNetCoreCLI@2
-  displayName: 'Create nuget'
+  displayName: 'Build the project - $(buildConfiguration)'
   inputs:
-    command: pack
-    outputDir: $(Build.ArtifactStagingDirectory)/$(modelProjPath)
-    # arguments: '-c release'
+    command: 'build'
+    arguments: '--no-restore --configuration $(buildConfiguration)'
     projects: '$(workingDirectory)/*.csproj'
 
 - task: DotNetCoreCLI@2
+  displayName: 'Pack the project - $(buildConfiguration)'
+  inputs:
+    command: pack
+    outputDir: $(Build.ArtifactStagingDirectory)/$(modelProjPath)
+    arguments: '--no-build --configuration $(buildConfiguration)'
+    projects: '$(workingDirectory)/*.csproj'
+    versioningScheme: byPrereleaseNumber
+    majorVersion: '0'
+    minorVersion: '1'
+    patchVersion: '0'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Publish NuGet package'
   inputs:
     command: 'push'
     packagesToPush: '$(Build.ArtifactStagingDirectory)/$(modelProjPath)/*.nupkg'
     nuGetFeedType: 'internal'
-    publishVstsFeed: '6aa6eab7-4bc3-4e54-b377-a0710c83a895'
+    publishVstsFeed: 'PoolSensor-Models'
 
 - script: echo Hello, world!
   displayName: 'Run a one-line script'
