@@ -41,7 +41,7 @@ steps:
     command: 'push'
     packagesToPush: '$(Build.ArtifactStagingDirectory)/$(modelProjPath)/*.nupkg'
     nuGetFeedType: 'internal'
-    publishVstsFeed: 'PoolSensor-Models'
+    publishVstsFeed: 'PoolSensor/PoolSensor-Models'
 
 - script: echo Hello, world!
   displayName: 'Run a one-line script'
