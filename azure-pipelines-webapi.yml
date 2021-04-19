@@ -14,7 +14,7 @@ trigger:
     - PoolSensorAPI
 
 pool:
-  name: 'MyAgentPool'
+  vmImage: ubuntu-latest
 
 variables:
   buildConfiguration: 'Release'
